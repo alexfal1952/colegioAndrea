@@ -1,52 +1,90 @@
 <template>
-  <div class="page">
-    <div class="card">
-      <h1>Crear cuenta</h1>
-      <p class="subtitle">Regístrate para continuar</p>
+  <div>
+    <p class="login-box-msg">Regístrate para continuar</p>
 
-      <form class="form" @submit.prevent="handleRegister">
-        <label>
-          Nombre
-          <input v-model="name" type="text" required autocomplete="name" />
-        </label>
+    <form @submit.prevent="handleRegister">
+      <div class="input-group mb-3">
+        <input
+          v-model="name"
+          type="text"
+          class="form-control"
+          placeholder="Nombre"
+          required
+          autocomplete="name"
+        >
+        <div class="input-group-text">
+          <span class="bi bi-person" />
+        </div>
+      </div>
 
-        <label>
-          Email
-          <input v-model="email" type="email" required autocomplete="email" />
-        </label>
+      <div class="input-group mb-3">
+        <input
+          v-model="email"
+          type="email"
+          class="form-control"
+          placeholder="Email"
+          required
+          autocomplete="email"
+        >
+        <div class="input-group-text">
+          <span class="bi bi-envelope" />
+        </div>
+      </div>
 
-        <label>
-          Contraseña
-          <input v-model="password" type="password" required autocomplete="new-password" />
-        </label>
+      <div class="input-group mb-3">
+        <input
+          v-model="password"
+          type="password"
+          class="form-control"
+          placeholder="Contraseña"
+          required
+          autocomplete="new-password"
+        >
+        <div class="input-group-text">
+          <span class="bi bi-lock-fill" />
+        </div>
+      </div>
 
-        <label>
-          Confirmar contraseña
-          <input v-model="passwordConfirmation" type="password" required autocomplete="new-password" />
-        </label>
+      <div class="input-group mb-3">
+        <input
+          v-model="passwordConfirmation"
+          type="password"
+          class="form-control"
+          placeholder="Confirmar contraseña"
+          required
+          autocomplete="new-password"
+        >
+        <div class="input-group-text">
+          <span class="bi bi-lock-fill" />
+        </div>
+      </div>
 
-      <p v-if="auth.error" class="error">
+      <div v-if="auth.error" class="alert alert-danger py-2" role="alert">
         {{ auth.error }}
         <template v-if="auth.error.includes('ya está registrado')">
-          <NuxtLink to="/login">Inicia sesión</NuxtLink>
+          <NuxtLink to="/login" class="alert-link ms-1">Inicia sesión</NuxtLink>
         </template>
-      </p>
+      </div>
 
-        <button type="submit" :disabled="auth.loading">
-          {{ auth.loading ? 'Registrando...' : 'Registrarse' }}
-        </button>
-      </form>
+      <div class="row mb-3">
+        <div class="col-12">
+          <button type="submit" class="btn btn-primary w-100" :disabled="auth.loading">
+            {{ auth.loading ? 'Registrando...' : 'Registrarse' }}
+          </button>
+        </div>
+      </div>
+    </form>
 
-      <p class="footer">
-        ¿Ya tienes cuenta?
-        <NuxtLink to="/login">Inicia sesión</NuxtLink>
-      </p>
-    </div>
+    <p class="mb-0 text-center">
+      ¿Ya tienes cuenta?
+      <NuxtLink to="/login" class="fw-semibold">Inicia sesión</NuxtLink>
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
+  layout: 'auth',
   middleware: 'guest',
 })
 
@@ -71,85 +109,3 @@ async function handleRegister() {
   }
 }
 </script>
-
-<style scoped>
-.page {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, #0f172a, #1e3a5f);
-  padding: 1rem;
-}
-
-.card {
-  width: 100%;
-  max-width: 420px;
-  background: #fff;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-}
-
-h1 {
-  margin: 0;
-  font-size: 1.75rem;
-  color: #0f172a;
-}
-
-.subtitle {
-  margin: 0.5rem 0 1.5rem;
-  color: #64748b;
-}
-
-.form {
-  display: grid;
-  gap: 1rem;
-}
-
-label {
-  display: grid;
-  gap: 0.35rem;
-  font-size: 0.9rem;
-  color: #334155;
-}
-
-input {
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 0.75rem;
-  font-size: 1rem;
-}
-
-button {
-  margin-top: 0.5rem;
-  border: none;
-  border-radius: 8px;
-  padding: 0.85rem;
-  background: #2563eb;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.error {
-  color: #dc2626;
-  margin: 0;
-  font-size: 0.9rem;
-}
-
-.footer {
-  margin-top: 1.5rem;
-  text-align: center;
-  color: #64748b;
-}
-
-a {
-  color: #2563eb;
-  text-decoration: none;
-}
-</style>

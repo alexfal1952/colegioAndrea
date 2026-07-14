@@ -3,6 +3,10 @@
 </template>
 
 <script setup lang="ts">
+definePageMeta({
+  layout: 'blank',
+})
+
 const auth = useAuthStore()
 
 if (auth.isAuthenticated) {
