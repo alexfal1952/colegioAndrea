@@ -1,110 +1,55 @@
 <template>
-  <div class="page">
-    <header class="header">
-      <div>
-        <h1>Dashboard</h1>
-        <p>Bienvenido, {{ auth.user?.name }}</p>
+  <LteAppContent title="Dashboard" :breadcrumbs="[{ label: 'Inicio', href: '/dashboard' }, { label: 'Dashboard' }]">
+    <div class="row">
+      <div class="col-lg-3 col-6">
+        <LteSmallBox title="1" text="Usuario activo" theme="primary" icon="bi-person-check" url="/dashboard" />
       </div>
-      <button @click="handleLogout">Cerrar sesión</button>
-    </header>
+      <div class="col-lg-3 col-6">
+        <LteSmallBox title="API" text="Laravel Sanctum" theme="success" icon="bi-shield-check" url="#" />
+      </div>
+      <div class="col-lg-3 col-6">
+        <LteSmallBox title="Nuxt 3" text="Frontend" theme="warning" icon="bi-box" url="#" />
+      </div>
+      <div class="col-lg-3 col-6">
+        <LteSmallBox title="AdminLTE" text="Plantilla" theme="danger" icon="bi-palette" url="#" />
+      </div>
+    </div>
 
-    <main class="content">
-      <section class="panel">
-        <h2>Tu perfil</h2>
-        <dl>
-          <div>
-            <dt>ID</dt>
-            <dd>{{ auth.user?.id }}</dd>
-          </div>
-          <div>
-            <dt>Nombre</dt>
-            <dd>{{ auth.user?.name }}</dd>
-          </div>
-          <div>
-            <dt>Email</dt>
-            <dd>{{ auth.user?.email }}</dd>
-          </div>
-        </dl>
-      </section>
-    </main>
-  </div>
+    <div class="row">
+      <div class="col-md-6">
+        <LteCard title="Tu perfil" collapsible>
+          <dl class="row mb-0">
+            <dt class="col-sm-4">ID</dt>
+            <dd class="col-sm-8">{{ auth.user?.id }}</dd>
+            <dt class="col-sm-4">Nombre</dt>
+            <dd class="col-sm-8">{{ auth.user?.name }}</dd>
+            <dt class="col-sm-4">Email</dt>
+            <dd class="col-sm-8">{{ auth.user?.email }}</dd>
+          </dl>
+        </LteCard>
+      </div>
+
+      <div class="col-md-6">
+        <LteCard title="Empezar a trabajar" collapsible>
+          <p class="mb-2">
+            Este layout (`layouts/admin.vue`) ya incluye sidebar, topbar, dark mode y menú.
+          </p>
+          <ul class="mb-0">
+            <li>Añade rutas en <code>frontend/pages/</code></li>
+            <li>Enlázalas en el menú de <code>layouts/admin.vue</code></li>
+            <li>Usa <code>definePageMeta({ layout: 'admin', middleware: 'auth' })</code></li>
+          </ul>
+        </LteCard>
+      </div>
+    </div>
+  </LteAppContent>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
+  layout: 'admin',
   middleware: 'auth',
 })
 
 const auth = useAuthStore()
-
-async function handleLogout() {
-  await auth.logout()
-  await navigateTo('/login')
-}
 </script>
-
-<style scoped>
-.page {
-  min-height: 100vh;
-  background: #f8fafc;
-}
-
-.header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 2rem;
-  background: #0f172a;
-  color: #fff;
-}
-
-.header h1 {
-  margin: 0;
-}
-
-.header p {
-  margin: 0.25rem 0 0;
-  color: #cbd5e1;
-}
-
-.header button {
-  border: none;
-  border-radius: 8px;
-  padding: 0.65rem 1rem;
-  background: #ef4444;
-  color: #fff;
-  cursor: pointer;
-}
-
-.content {
-  padding: 2rem;
-}
-
-.panel {
-  max-width: 640px;
-  background: #fff;
-  border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 4px 20px rgba(15, 23, 42, 0.08);
-}
-
-.panel h2 {
-  margin-top: 0;
-}
-
-dl {
-  display: grid;
-  gap: 1rem;
-}
-
-dt {
-  font-size: 0.85rem;
-  color: #64748b;
-}
-
-dd {
-  margin: 0.15rem 0 0;
-  font-size: 1.05rem;
-  color: #0f172a;
-}
-</style>

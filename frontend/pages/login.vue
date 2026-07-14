@@ -1,41 +1,62 @@
 <template>
-  <div class="page">
-    <div class="card">
-      <h1>Iniciar sesión</h1>
-      <p class="subtitle">Accede a tu cuenta</p>
+  <div>
+    <p class="login-box-msg">Accede a tu cuenta</p>
 
-      <form class="form" @submit.prevent="handleLogin">
-        <label>
-          Email
-          <input v-model="email" type="email" required autocomplete="email" />
-        </label>
+    <form @submit.prevent="handleLogin">
+      <div class="input-group mb-3">
+        <input
+          v-model="email"
+          type="email"
+          class="form-control"
+          placeholder="Email"
+          required
+          autocomplete="email"
+        >
+        <div class="input-group-text">
+          <span class="bi bi-envelope" />
+        </div>
+      </div>
 
-        <label>
-          Contraseña
-          <input v-model="password" type="password" required autocomplete="current-password" />
-        </label>
+      <div class="input-group mb-3">
+        <input
+          v-model="password"
+          type="password"
+          class="form-control"
+          placeholder="Contraseña"
+          required
+          autocomplete="current-password"
+        >
+        <div class="input-group-text">
+          <span class="bi bi-lock-fill" />
+        </div>
+      </div>
 
-        <p class="forgot">
+      <div v-if="auth.error" class="alert alert-danger py-2" role="alert">
+        {{ auth.error }}
+      </div>
+
+      <div class="row mb-3">
+        <div class="col-8">
           <NuxtLink to="/forgot-password">¿Olvidaste tu contraseña?</NuxtLink>
-        </p>
+        </div>
+        <div class="col-4">
+          <button type="submit" class="btn btn-primary btn-block w-100" :disabled="auth.loading">
+            {{ auth.loading ? '...' : 'Entrar' }}
+          </button>
+        </div>
+      </div>
+    </form>
 
-        <p v-if="auth.error" class="error">{{ auth.error }}</p>
-
-        <button type="submit" :disabled="auth.loading">
-          {{ auth.loading ? 'Entrando...' : 'Entrar' }}
-        </button>
-      </form>
-
-      <p class="footer">
-        ¿No tienes cuenta?
-        <NuxtLink to="/register">Regístrate</NuxtLink>
-      </p>
-    </div>
+    <p class="mb-0 text-center">
+      ¿No tienes cuenta?
+      <NuxtLink to="/register" class="fw-semibold">Regístrate</NuxtLink>
+    </p>
   </div>
 </template>
 
 <script setup lang="ts">
 definePageMeta({
+  layout: 'auth',
   middleware: 'guest',
 })
 
@@ -55,91 +76,3 @@ async function handleLogin() {
   }
 }
 </script>
-
-<style scoped>
-.page {
-  min-height: 100vh;
-  display: grid;
-  place-items: center;
-  background: linear-gradient(135deg, #0f172a, #1e3a5f);
-  padding: 1rem;
-}
-
-.card {
-  width: 100%;
-  max-width: 420px;
-  background: #fff;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
-}
-
-h1 {
-  margin: 0;
-  font-size: 1.75rem;
-  color: #0f172a;
-}
-
-.subtitle {
-  margin: 0.5rem 0 1.5rem;
-  color: #64748b;
-}
-
-.form {
-  display: grid;
-  gap: 1rem;
-}
-
-label {
-  display: grid;
-  gap: 0.35rem;
-  font-size: 0.9rem;
-  color: #334155;
-}
-
-input {
-  border: 1px solid #cbd5e1;
-  border-radius: 8px;
-  padding: 0.75rem;
-  font-size: 1rem;
-}
-
-button {
-  margin-top: 0.5rem;
-  border: none;
-  border-radius: 8px;
-  padding: 0.85rem;
-  background: #2563eb;
-  color: #fff;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-button:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-.error {
-  color: #dc2626;
-  margin: 0;
-  font-size: 0.9rem;
-}
-
-.forgot {
-  margin: 0;
-  text-align: right;
-  font-size: 0.9rem;
-}
-
-.footer {
-  margin-top: 1.5rem;
-  text-align: center;
-  color: #64748b;
-}
-
-a {
-  color: #2563eb;
-  text-decoration: none;
-}
-</style>
