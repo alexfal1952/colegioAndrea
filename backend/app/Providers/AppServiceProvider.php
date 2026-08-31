@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\User;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Notifications\Messages\MailMessage;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -21,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        Route::bind('funcionario', function (string $value) {
+            return User::with('role')->findOrFail($value);
+        });
+
         $frontendUrl = rtrim(env('FRONTEND_URL', 'http://localhost:5173'), '/');
 
         ResetPassword::createUrlUsing(function (object $notifiable, string $token) use ($frontendUrl) {

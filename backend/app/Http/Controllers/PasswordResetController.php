@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\PasswordResetMail;
 use App\Models\User;
 use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Str;
 use Illuminate\Validation\ValidationException;
+use Throwable;
 
 class PasswordResetController extends Controller
 {
@@ -18,11 +22,30 @@ class PasswordResetController extends Controller
             'email' => ['required', 'email'],
         ]);
 
-        Password::sendResetLink($request->only('email'));
+        $user = User::where('email', $request->email)->first();
 
-        return response()->json([
-            'message' => 'Si el correo existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña.',
-        ]);
+        // Respuesta genérica por seguridad (no revelar si el email existe)
+        $genericMessage = 'Si el correo existe en nuestro sistema, recibirás un enlace para restablecer tu contraseña.';
+
+        if (! $user) {
+            return response()->json(['message' => $genericMessage]);
+        }
+
+        $token = Password::broker()->createToken($user);
+        $frontendUrl = rtrim((string) env('FRONTEND_URL', 'http://localhost:5173'), '/');
+        $resetUrl = $frontendUrl.'/reset-password?token='.urlencode($token).'&email='.urlencode($user->email);
+        $expire = (int) config('auth.passwords.'.config('auth.defaults.passwords').'.expire', 60);
+
+        try {
+            Mail::to($user->email)->send(new PasswordResetMail($user, $resetUrl, $expire));
+        } catch (Throwable $e) {
+            Log::error('Fallo al enviar forgot-password', [
+                'email' => $user->email,
+                'error' => $e->getMessage(),
+            ]);
+        }
+
+        return response()->json(['message' => $genericMessage]);
     }
 
     public function reset(Request $request): JsonResponse
@@ -58,7 +81,7 @@ class PasswordResetController extends Controller
 
         return response()->json([
             'message' => 'Contraseña restablecida correctamente.',
-            'user' => $user,
+            'user' => $user->load('role'),
             'token' => $token,
         ]);
     }

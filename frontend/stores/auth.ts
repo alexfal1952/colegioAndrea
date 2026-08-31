@@ -186,6 +186,14 @@ export const useAuthStore = defineStore('auth', {
         }
       }
 
+      // Fallos de red / CORS (sin respuesta del servidor)
+      if (typeof error === 'object' && error !== null && 'message' in error) {
+        const message = String((error as { message?: string }).message || '')
+        if (message.includes('Failed to fetch') || message.includes('NetworkError') || message.includes('fetch')) {
+          return 'No se pudo conectar con la API. Usa http://localhost:5173 e intenta de nuevo.'
+        }
+      }
+
       return 'Ocurrió un error inesperado'
     },
   },

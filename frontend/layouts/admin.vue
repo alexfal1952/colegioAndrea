@@ -10,7 +10,7 @@ const menu: MenuNode[] = [
   { type: 'header', text: 'Principal' },
   { type: 'item', text: 'Dashboard', href: '/dashboard', icon: 'bi-speedometer2' },
   { type: 'item', text: 'Herramientas', href: '/herramientas', icon: 'bi-tools' },
-  { type: 'item', text: 'Funionarios', href: '/funionarios', icon: 'bi-person' },
+  { type: 'item', text: 'Funcionarios', href: '/funionarios', icon: 'bi-people' },
   {
     type: 'group',
     text: 'Cuenta',
@@ -23,7 +23,7 @@ const menu: MenuNode[] = [
 
 const user = computed<TopbarUser>(() => ({
   name: auth.user?.name ?? 'Usuario',
-  role: auth.user?.email ?? '',
+  role: auth.user?.role?.name ?? auth.user?.email ?? '',
   image: `https://ui-avatars.com/api/?name=${encodeURIComponent(auth.user?.name || 'U')}&background=0d6efd&color=fff`,
 }))
 

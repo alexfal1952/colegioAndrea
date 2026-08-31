@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -27,16 +28,19 @@ class AuthController extends Controller
             'password.confirmed' => 'Las contraseñas no coinciden.',
         ]);
 
+        $defaultRole = Role::where('slug', 'funcionario')->first();
+
         $user = User::create([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => Hash::make($validated['password']),
+            'role_id' => $defaultRole?->id,
         ]);
 
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
+            'user' => $user->load('role'),
             'token' => $token,
         ], 201);
     }
@@ -62,14 +66,14 @@ class AuthController extends Controller
         $token = $user->createToken('auth-token')->plainTextToken;
 
         return response()->json([
-            'user' => $user,
+            'user' => $user->load('role'),
             'token' => $token,
         ]);
     }
 
     public function user(Request $request): JsonResponse
     {
-        return response()->json($request->user());
+        return response()->json($request->user()->load('role'));
     }
 
     public function logout(Request $request): JsonResponse

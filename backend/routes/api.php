@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\FuncionarioController;
 use App\Http\Controllers\PasswordResetController;
 use Illuminate\Support\Facades\Route;
 
@@ -12,4 +13,8 @@ Route::post('/reset-password', [PasswordResetController::class, 'reset']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', [AuthController::class, 'user']);
     Route::post('/logout', [AuthController::class, 'logout']);
+
+    Route::get('/roles', [FuncionarioController::class, 'roles']);
+    Route::post('/funcionarios/{funcionario}/reset-password', [FuncionarioController::class, 'sendPasswordReset']);
+    Route::apiResource('funcionarios', FuncionarioController::class)->except(['show']);
 });
