@@ -64,7 +64,7 @@ const auth = useAuthStore()
 const route = useRoute()
 
 const email = ref('admin@andrea.com')
-const password = ref('password123')
+const password = ref('123456789')
 
 async function handleLogin() {
   try {
