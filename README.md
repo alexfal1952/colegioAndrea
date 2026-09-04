@@ -19,20 +19,6 @@ Stack dockerizado con versiones equivalentes a **XAMPP 8.2.12**:
 | Frontend Nuxt 3 | http://localhost:5173 |
 | phpMyAdmin | http://localhost:8080 |
 
-## Exponer a internet
-
-### HTTPS con tu dominio (recomendado)
-
-Ver **[README-HTTPS.md](./README-HTTPS.md)** — Caddy + Let's Encrypt en `libroclases.ddns.net`.
-
-### Túnel temporal (Cloudflare)
-
-Ver **[README-TUNEL.md](./README-TUNEL.md)**.
-
-```bash
-./scripts/expose-internet.sh
-```
-
 ## Inicio rápido
 
 ```bash

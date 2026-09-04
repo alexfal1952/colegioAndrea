@@ -25,11 +25,6 @@ export default defineNuxtConfig({
     port: 5173,
     host: '0.0.0.0',
   },
-  vite: {
-    server: {
-      allowedHosts: ['libroclases.ddns.net', 'localhost', '127.0.0.1'],
-    },
-  },
   typescript: {
     strict: true,
   },

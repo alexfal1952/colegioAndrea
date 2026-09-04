@@ -1,11 +1,5 @@
 # Versiones alineadas con XAMPP 8.2.12:
 # PHP 8.2.12 | Apache 2.4.58 | MariaDB 10.4.32 | phpMyAdmin 5.2.1
-#
-# HTTPS público: Caddy compartido en ~/Documentos/reverse-proxy/
-#   https://libroclases.ddns.net        → frontend
-#   https://libroclases.ddns.net:8000   → API
-
-name: libroclases
 
 services:
   backend:
@@ -13,15 +7,23 @@ services:
       context: ./backend
       dockerfile: Dockerfile
     container_name: andrea-backend
+    ports:
+      - "8000:80"
     volumes:
       - ./backend:/var/www/html
     environment:
       APP_NAME: Andrea
       APP_ENV: local
       APP_DEBUG: "true"
-      APP_URL: ${APP_URL:-http://localhost:8000}
-      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
-      CORS_ALLOWED_ORIGINS: ${CORS_ALLOWED_ORIGINS:-http://localhost:5173,http://127.0.0.1:5173}
+      APP_URL: http://localhost:8000
+      DB_CONNECTION: mysql
+      DB_HOST: mariadb
+      DB_PORT: 3306
+      DB_DATABASE: andrea
+      DB_USERNAME: andrea
+      DB_PASSWORD: secret
+      FRONTEND_URL: http://localhost:5173
+      CORS_ALLOWED_ORIGINS: http://localhost:5173,http://127.0.0.1:5173,http://0.0.0.0:5173
     depends_on:
       mariadb:
         condition: service_healthy
@@ -70,14 +72,14 @@ services:
       dockerfile: Dockerfile
     container_name: andrea-frontend
     ports:
-      - "0.0.0.0:${FRONTEND_PORT:-5173}:5173"
+      - "5173:5173"
     volumes:
       - ./frontend:/app
       - frontend_node_modules:/app/node_modules
       - frontend_nuxt:/app/.nuxt
       - frontend_output:/app/.output
     environment:
-      NUXT_PUBLIC_API_BASE: ${NUXT_PUBLIC_API_BASE:-http://localhost:8000/api}
+      NUXT_PUBLIC_API_BASE: http://localhost:8000/api
     depends_on:
       - backend
     networks:
