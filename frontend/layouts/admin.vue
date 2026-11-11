@@ -11,6 +11,13 @@ const menu: MenuNode[] = [
   { type: 'item', text: 'Dashboard', href: '/dashboard', icon: 'bi-speedometer2' },
   { type: 'item', text: 'Herramientas', href: '/herramientas', icon: 'bi-tools' },
   { type: 'item', text: 'Funcionarios', href: '/funionarios', icon: 'bi-people' },
+  { type: 'item', text: 'Animales', href: '/animales', icon: 'bi-heart-pulse' },  
+  { type: 'item', text: 'Animales Dos', href: '/animales-dos', icon: 'bi-heart' },
+  { type: 'item', text: 'Peces (Services)', href: '/peces', icon: 'bi-water' },
+  { type: 'item', text: 'Pokemon', href: '/pokemon', icon: 'bi-pokeball' },
+  { type: 'item', text: 'Marca', href: '/marca', icon: 'bi-pokeball' },
+  { type: 'item', text: 'Marca Dos', href: '/marca-dos', icon: 'bi-pokeball' },
+  { type: 'item', text: 'Productos', href: '/productos', icon: 'bi-pokeball' },
   {
     type: 'group',
     text: 'Cuenta',

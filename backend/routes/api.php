@@ -1,8 +1,10 @@
 <?php
 
+use App\Http\Controllers\AnimalController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\FuncionarioController;
 use App\Http\Controllers\PasswordResetController;
+use App\Http\Controllers\PezController;
 use Illuminate\Support\Facades\Route;
 
 Route::post('/register', [AuthController::class, 'register']);
@@ -17,4 +19,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/roles', [FuncionarioController::class, 'roles']);
     Route::post('/funcionarios/{funcionario}/reset-password', [FuncionarioController::class, 'sendPasswordReset']);
     Route::apiResource('funcionarios', FuncionarioController::class)->except(['show']);
+    Route::apiResource('animales', AnimalController::class)
+        ->parameters(['animales' => 'animal']);
+    Route::apiResource('peces', PezController::class)
+        ->parameters(['peces' => 'pez']);
 });
